@@ -81,5 +81,21 @@ public class TodoAPI {
 
         );
 
+        delete(
+                "/todos/:id",
+                (req,res)->
+                {
+                    if(!req.params(":id").matches("-?\\d+(\\.\\d+)?")){
+                        return String.format("The id \"%s\" is not a number!", req.params(":id"));}
+                    Gson gson = new Gson();
+                    for (Todo todo : todos) {
+                        if (req.params(":id").equals(todo.getId().toString())) {
+                            todos.remove(todo);
+                            return todo.toJson();
+                        }
+                    }
+                    return String.format("Todo with the id \"%s\" not found!", req.params(":id"));
+                }
+        );
     }
 }
