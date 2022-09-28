@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Todo {
     private static final AtomicLong count = new AtomicLong(0);
     private final Long id;
-    private final String summary;
-    private final String description;
+    private String summary;
+    private String description;
 
     public Todo(Long id, String summary, String description) {
         this.id = id;
@@ -32,9 +32,11 @@ public class Todo {
         return summary;
     }
 
-    public String getDescription() {
-        return description;
-    }
+    public void setSummary(String summary){this.summary = summary; }
+
+    public String getDescription() { return description; }
+
+    public void setDescription(String description){this.description = description; }
 
     public String toJson()
     {

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.regex.Pattern;
 
 import static spark.Spark.*;
 
@@ -14,7 +15,6 @@ import static spark.Spark.*;
  * Rest-Endpoint.
  */
 public class TodoAPI {
-    //private static final AtomicLong count = new AtomicLong(0);
     public static void main(String[] args) {
         if (args.length > 0) {
             port(Integer.parseInt(args[0]));
@@ -39,23 +39,44 @@ public class TodoAPI {
                 (req,res)->
                 {
                     Gson gson = new Gson();
+
+                    /*Pattern pattern = Pattern.compile("-?\\\\d+(\\\\.\\\\d+)?");
+                    if(!pattern.matcher(req.params(":id")).matches()){
+                        return String.format("The id \"%s\" is not a number!", req.params(":id"));}*/
+
+                    if(!req.params(":id").matches("-?\\d+(\\.\\d+)?")){
+                        return String.format("The id \"%s\" is not a number!", req.params(":id"));}
+
                     for (Todo todo : todos){
                         if ( req.params(":id").equals(todo.getId().toString())) {
                     return todo.toJson();
                 }}
+                    return String.format("Todo with the id \"%s\" not found!", req.params(":id"));
 
-                    return "id not found";
                 }
         );
         put(
-                "/todos",
+                "/todos/:id",
                 (req,res)->
                 {
-                    Todo todo = new Todo(null,null);
                     Gson gson = new Gson();
-                    todo = gson.fromJson(req.body(),Todo.class);
-                    todos.add(todo);
-                    return todo.toJson();
+
+                    /*Pattern pattern = Pattern.compile("-?\\\\d+(\\\\.\\\\d+)?");
+                    if(!pattern.matcher(req.params(":id")).matches()){
+                        return String.format("The id \"%s\" is not a number!", req.params(":id"));}*/
+
+                    if(!req.params(":id").matches("-?\\d+(\\.\\d+)?")){
+                        return String.format("The id \"%s\" is not a number!", req.params(":id"));}
+
+                    Todo inputTodo = gson.fromJson(req.body(),Todo.class);
+                    for (Todo todo : todos){
+                        if ( req.params(":id").equals(todo.getId().toString())) {
+                            todo.setSummary(inputTodo.getSummary());
+                            todo.setDescription(inputTodo.getDescription());
+                            return "Updated";
+                        }}
+
+                    return String.format("Todo with the id \"%s\" not found!", req.params(":id"));
                 }
         );
         post(
