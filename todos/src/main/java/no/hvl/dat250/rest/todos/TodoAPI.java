@@ -2,7 +2,9 @@ package no.hvl.dat250.rest.todos;
 
 import com.google.gson.Gson;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -30,6 +32,19 @@ public class TodoAPI {
                 {
                     Gson gson = new Gson();
                     return gson.toJson(todos);
+                }
+        );
+        get(
+                "/todos/:id",
+                (req,res)->
+                {
+                    Gson gson = new Gson();
+                    for (Todo todo : todos){
+                        if ( req.params(":id").equals(todo.getId().toString())) {
+                    return todo.toJson();
+                }}
+
+                    return "id not found";
                 }
         );
         put(
