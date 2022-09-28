@@ -39,14 +39,8 @@ public class TodoAPI {
                 (req,res)->
                 {
                     Gson gson = new Gson();
-
-                    /*Pattern pattern = Pattern.compile("-?\\\\d+(\\\\.\\\\d+)?");
-                    if(!pattern.matcher(req.params(":id")).matches()){
-                        return String.format("The id \"%s\" is not a number!", req.params(":id"));}*/
-
                     if(!req.params(":id").matches("-?\\d+(\\.\\d+)?")){
                         return String.format("The id \"%s\" is not a number!", req.params(":id"));}
-
                     for (Todo todo : todos){
                         if ( req.params(":id").equals(todo.getId().toString())) {
                     return todo.toJson();
@@ -60,14 +54,8 @@ public class TodoAPI {
                 (req,res)->
                 {
                     Gson gson = new Gson();
-
-                    /*Pattern pattern = Pattern.compile("-?\\\\d+(\\\\.\\\\d+)?");
-                    if(!pattern.matcher(req.params(":id")).matches()){
-                        return String.format("The id \"%s\" is not a number!", req.params(":id"));}*/
-
                     if(!req.params(":id").matches("-?\\d+(\\.\\d+)?")){
                         return String.format("The id \"%s\" is not a number!", req.params(":id"));}
-
                     Todo inputTodo = gson.fromJson(req.body(),Todo.class);
                     for (Todo todo : todos){
                         if ( req.params(":id").equals(todo.getId().toString())) {
