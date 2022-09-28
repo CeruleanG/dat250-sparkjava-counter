@@ -1,8 +1,12 @@
 package no.hvl.dat250.rest.todos;
 
+import com.google.gson.Gson;
+
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Todo {
+    private static final AtomicLong count = new AtomicLong(0);
     private final Long id;
     private final String summary;
     private final String description;
@@ -14,7 +18,7 @@ public class Todo {
     }
 
     public Todo(String summary, String description) {
-        this(null, summary, description);
+        this(count.incrementAndGet(), summary, description);
     }
 
     /**
@@ -32,6 +36,12 @@ public class Todo {
         return description;
     }
 
+    public String toJson()
+    {
+        Gson gson = new Gson();
+        String jsonInString = gson.toJson(this);
+        return jsonInString;
+    }
     // Do not change equals and hashcode!
 
     @Override
